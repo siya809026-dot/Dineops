@@ -1,4 +1,3 @@
-
 import axios from "axios";
 
 const api = axios.create({
@@ -8,7 +7,6 @@ const api = axios.create({
   },
 });
 
-// Automatically attach JWT to protected API requests.
 api.interceptors.request.use(
   (config) => {
     const token = sessionStorage.getItem("dineops_token");
