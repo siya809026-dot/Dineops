@@ -1,4 +1,3 @@
-
 import {
   BrowserRouter,
   Routes,
@@ -25,8 +24,6 @@ import PosPage from "../pages/Dashboard/PosPage";
 import RecipesPage from "../pages/Dashboard/RecipesPage";
 import WastagePage from "../pages/Dashboard/WastagePage";
 import SalesHistoryPage from "../pages/Dashboard/SalesHistoryPage";
-
-// Correct Demand Forecasting import
 import DemandForecasting from "../pages/Dashboard/DemandForecasting";
 
 const allowedRoles = [
@@ -46,6 +43,17 @@ function getCurrentUser() {
   }
 }
 
+function getRoleHome(role) {
+  const roleHome = {
+    OWNER: "/dashboard/overview",
+    BRANCH_MANAGER: "/dashboard/inventory",
+    FRANCHISE_MANAGER: "/dashboard/inventory",
+    STAFF: "/dashboard/pos",
+  };
+
+  return roleHome[role] || "/login-portal";
+}
+
 function ProtectedRoute() {
   const token = sessionStorage.getItem("dineops_token");
   const user = getCurrentUser();
@@ -59,7 +67,7 @@ function ProtectedRoute() {
     sessionStorage.removeItem("dineops_token");
     sessionStorage.removeItem("dineops_user");
 
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login-portal" replace />;
   }
 
   return <Outlet />;
@@ -68,16 +76,9 @@ function ProtectedRoute() {
 function RoleHomeRedirect() {
   const user = getCurrentUser();
 
-  const roleHome = {
-    OWNER: "/dashboard/overview",
-    BRANCH_MANAGER: "/dashboard/inventory",
-    FRANCHISE_MANAGER: "/dashboard/inventory",
-    STAFF: "/dashboard/pos",
-  };
-
   return (
     <Navigate
-      to={roleHome[user?.role] || "/login"}
+      to={getRoleHome(user?.role)}
       replace
     />
   );
@@ -87,7 +88,12 @@ function RequireRole({ roles, children }) {
   const user = getCurrentUser();
 
   if (!user || !roles.includes(user.role)) {
-    return <Navigate to="/dashboard" replace />;
+    return (
+      <Navigate
+        to={getRoleHome(user?.role)}
+        replace
+      />
+    );
   }
 
   return children;
@@ -97,6 +103,7 @@ export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
+
         {/* Public Pages */}
         <Route path="/" element={<Landing />} />
         <Route path="/pricing" element={<Pricing />} />
@@ -130,7 +137,7 @@ export default function AppRouter() {
               }
             />
 
-            {/* Branch Management */}
+            {/* Branches */}
             <Route
               path="branches"
               element={
@@ -140,7 +147,7 @@ export default function AppRouter() {
               }
             />
 
-            {/* Inventory Management */}
+            {/* Inventory */}
             <Route
               path="inventory"
               element={
@@ -156,19 +163,17 @@ export default function AppRouter() {
               }
             />
 
-            {/* Demand Forecasting */}
+            {/* Forecast */}
             <Route
               path="forecast"
               element={
-                <RequireRole
-                  roles={["OWNER", "BRANCH_MANAGER"]}
-                >
+                <RequireRole roles={["OWNER", "BRANCH_MANAGER"]}>
                   <DemandForecasting />
                 </RequireRole>
               }
             />
 
-            {/* Recipe Management */}
+            {/* Recipes */}
             <Route
               path="recipes"
               element={
@@ -178,7 +183,7 @@ export default function AppRouter() {
               }
             />
 
-            {/* Wastage Management */}
+            {/* Wastage */}
             <Route
               path="wastage"
               element={
@@ -221,7 +226,7 @@ export default function AppRouter() {
               }
             />
 
-            {/* POS & Billing */}
+            {/* POS */}
             <Route
               path="pos"
               element={
@@ -245,6 +250,7 @@ export default function AppRouter() {
           path="*"
           element={<Navigate to="/" replace />}
         />
+
       </Routes>
     </BrowserRouter>
   );

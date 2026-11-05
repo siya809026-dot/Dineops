@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -9,7 +8,6 @@ import {
   AlertCircle,
 } from "lucide-react";
 import api from "../../api/client";
-import axios from "axios";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -35,20 +33,10 @@ export default function Login() {
     setLoading(true);
 
     try {
-      // const response = await api.post("/auth/login", {
-      //   email: form.email.trim().toLowerCase(),
-      //   password: form.password,
-      // });
-      // https://dineops-1.onrender.com
-
-      const response = await axios.post("https://dineops-1.onrender.com/api/auth/login",  {
-    email: form.email.trim().toLowerCase(),
-    password: form.password,
-  },{
-        headers: {
-    "Content-Type": "application/json",
-  }
-      })
+      const response = await api.post("/auth/login", {
+        email: form.email.trim().toLowerCase(),
+        password: form.password,
+      });
 
       const { token, user } = response.data;
 
@@ -71,6 +59,7 @@ export default function Login() {
       sessionStorage.setItem("dineops_user", JSON.stringify(user));
 
       navigate("/dashboard", { replace: true });
+
     } catch (err) {
       setError(
         err.response?.data?.message ||
@@ -91,16 +80,13 @@ export default function Login() {
           "radial-gradient(ellipse at 50% 48%, #304f7d 0%, #203f70 38%, #10294e 75%, #091a32 100%)",
       }}
     >
-      {/* Centre glow */}
       <div
         className="pointer-events-none absolute left-1/2 top-1/2 h-[580px] w-[580px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[100px]"
         style={{ background: "rgba(111, 151, 210, 0.18)" }}
       />
 
-      {/* Login card */}
       <main className="relative z-10 w-full max-w-[426px] rounded-[21px] bg-[#f8f8f3] px-[38px] pb-[40px] pt-[42px] shadow-[0_15px_55px_rgba(0,0,0,0.16)]">
 
-        {/* Logo */}
         <div className="mb-[22px] text-center">
           <h1 className="text-[30px] font-extrabold leading-9 tracking-tight text-[#5276c5]">
             DineOps
@@ -122,7 +108,6 @@ export default function Login() {
             </div>
           )}
 
-          {/* Email */}
           <div>
             <label
               htmlFor="email"
@@ -146,7 +131,6 @@ export default function Login() {
             />
           </div>
 
-          {/* Password */}
           <div>
             <label
               htmlFor="password"
@@ -171,7 +155,6 @@ export default function Login() {
             />
           </div>
 
-          {/* Sign In */}
           <button
             type="submit"
             disabled={loading}
@@ -192,7 +175,6 @@ export default function Login() {
         </form>
       </main>
 
-      {/* Footer */}
       <footer className="absolute bottom-[69px] left-0 w-full text-center text-[11px] text-[#d0d9e9]">
         A product of{" "}
         <span className="font-bold text-[#a78bfa]">

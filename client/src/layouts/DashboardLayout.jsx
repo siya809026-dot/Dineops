@@ -1,4 +1,3 @@
-
 import React, {
   useCallback,
   useEffect,
@@ -32,8 +31,10 @@ import {
   BrainCircuit,
 } from "lucide-react";
 
+// Production backend URL
 const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+  import.meta.env.VITE_API_URL ||
+  "https://dineops-1.onrender.com/api";
 
 const navItems = [
   {
@@ -249,6 +250,7 @@ export default function DashboardLayout() {
         );
       } catch (error) {
         console.error("Fetch Notifications Error:", error);
+
         setNotificationError(
           error.message || "Something went wrong."
         );
