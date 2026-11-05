@@ -9,6 +9,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import api from "../../api/client";
+import axios from "axios";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -34,10 +35,20 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await api.post("/auth/login", {
-        email: form.email.trim().toLowerCase(),
-        password: form.password,
-      });
+      // const response = await api.post("/auth/login", {
+      //   email: form.email.trim().toLowerCase(),
+      //   password: form.password,
+      // });
+      // https://dineops-1.onrender.com
+
+      const response = await axios.post("https://dineops-1.onrender.com/api/auth/login",  {
+    email: form.email.trim().toLowerCase(),
+    password: form.password,
+  },{
+        headers: {
+    "Content-Type": "application/json",
+  }
+      })
 
       const { token, user } = response.data;
 
